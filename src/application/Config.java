@@ -34,8 +34,8 @@ public class Config {
            tags.add(new Tags("leaf", "CumulusCommunity/cumulus-vx", "512", "./helper_scripts/extra_switch_config.sh", "lab.yml"));
            tags.add(new Tags("spine", "CumulusCommunity/cumulus-vx", "512", "./helper_scripts/extra_switch_config.sh", "lab.yml"));
            tags.add(new Tags("mgmt", "CumulusCommunity/cumulus-vx", "512", "./helper_scripts/extra_switch_config.sh", "lab.yml"));
-           tags.add(new Tags("oob-switch", "CumulusCommunity/cumulus-vx", "512", "./helper_scripts/config_oob_switch.sh", "lab.yml"));
-           tags.add(new Tags("oob-server", "cumulus-VAGRANTSLASH-ts", "4096", "./helper_scripts/config_oob_server.sh", "netq.yml"));
+           tags.add(new Tags("oob-switch", "CumulusCommunity/cumulus-vx", "512", "./helper_scripts/oob_switch_config.sh", "lab.yml"));
+           tags.add(new Tags("oob-server", "cumulus-VAGRANTSLASH-ts", "4096", "./helper_scripts/OOB_Server_Config.sh", "netq.yml"));
     } 
     
     public String getURL() {
