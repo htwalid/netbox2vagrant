@@ -198,12 +198,12 @@ public class InterfaceConnections {
 			bw.write("}");
 			bw.close();
 			
-			System.out.println("topology.dot erfolgreich aktualisiert");
+			System.out.println("topology.dot successfully updated");
 		
 		} catch (Exception e) {
-//			System.out.println(e);
+			System.out.println(e);
 //			e.printStackTrace();
-			System.out.println("\nVerbindung zum Server nicht möglich. \nÜberprüfe übergebene Parameter oder Einstellungen in der config.json Datei");
+			System.out.println("\nConnection to Server failed. \nPlease check the passed parameters and the settings in your config.json file.");
 		}
 		}
 
@@ -240,35 +240,35 @@ public class InterfaceConnections {
 		try {
 		CommandLine cmd = parser.parse( options, args);
 		
-		if(cmd.hasOption("s")) {
-			Config.getInstance().setURL(cmd.getOptionValue("s"));
-			System.out.println("\nNeuer Servername: " + Config.getInstance().getURL());
-			servername = cmd.getOptionValue("s");
+		if(cmd.hasOption("n")) {
+			Config.getInstance().setURL(cmd.getOptionValue("n"));
+			System.out.println("\nNew Servername: " + Config.getInstance().getURL());
+			servername = Config.getInstance().getURL();
 			}
 		else {
 			servername = Config.getInstance().getURL();
 		}
 		if(cmd.hasOption("t")) {
         	Config.getInstance().setToken(cmd.getOptionValue("t"));
-        	System.out.println("\nNeuer Token: " + Config.getInstance().getToken());
-        	token = cmd.getOptionValue("t");
+        	System.out.println("\nNew Token: " + Config.getInstance().getToken());
+        	token = Config.getInstance().getToken();
 		}
 		else {
 			token = Config.getInstance().getToken();
 		}
 		if(cmd.hasOption("v")) {
         	Config.getInstance().setVersion(cmd.getOptionValue("v"));
-        	System.out.println("\nNeue Version: " + Config.getInstance().getVersion());
+        	System.out.println("\nNew Version: " + Config.getInstance().getVersion());
         	version = cmd.getOptionValue("v");
 			}
 		else {
 			version = Config.getInstance().getVersion();
 		}
-		if(cmd.hasOption("k")) {
+		if(cmd.hasOption("s")) {
 			update = false;
-            System.out.println("\nKonfiguration\nServer:\t\t" + Config.getInstance().getURL() + "\n"
+            System.out.println("\nConfiguration\nServer:\t\t" + Config.getInstance().getURL() + "\n"
     		+ "Token:\t\t" + Config.getInstance().getToken() + "\n"
-    		+ "Version:\t" + Config.getInstance().getVersion() + "\n"); 
+    		+ "Version:\t" + Config.getInstance().getVersion()); 
 			}
 		if(cmd.hasOption("sk")) {
 			skipoob = true;
@@ -279,13 +279,13 @@ public class InterfaceConnections {
 			String playbook = eingabe[1];
 			if (switch_funktion.equals("leaf") || switch_funktion.equals("mgmt") || switch_funktion.equals("spine") || switch_funktion.equals("oob-server") || switch_funktion.equals("oob-switch")) {
 				Config.getInstance().getTag(switch_funktion).setPlaybook(playbook);
-				System.out.println("\nPlaybook für " +  switch_funktion + ": " + playbook);
+				System.out.println("\nPlaybook for " +  switch_funktion + ": " + playbook);
 			}
 			if (switch_funktion.equals("all")) {
 				Config.getInstance().getleaf().setPlaybook(playbook);
 				Config.getInstance().getmgmt().setPlaybook(playbook);
 				Config.getInstance().getspine().setPlaybook(playbook);
-				System.out.println("\nPlaybook für leaf, spine und mgmt Switche: " + playbook);
+				System.out.println("\nPlaybook for leaf, spine and mgmt switches: " + playbook);
 			}
 		}
 		if(cmd.hasOption("o")) {
@@ -294,13 +294,13 @@ public class InterfaceConnections {
 			String os = eingabe[1];
 			if (switch_funktion.equals("leaf") || switch_funktion.equals("mgmt") || switch_funktion.equals("spine") || switch_funktion.equals("oob-server") || switch_funktion.equals("oob-switch")) {
 				Config.getInstance().getTag(switch_funktion).setOs(os);;
-				System.out.println("\nos-Link für " +  switch_funktion + ": " + os);
+				System.out.println("\nos-Link for " +  switch_funktion + ": " + os);
 			}
 			if (switch_funktion.equals("all")) {
 				Config.getInstance().getleaf().setOs(os);
 				Config.getInstance().getmgmt().setOs(os);
 				Config.getInstance().getspine().setOs(os);
-				System.out.println("\nos-Link für leaf, spine und mgmt Switche: " + os);
+				System.out.println("\nos-Link for leaf, spine and mgmt switches: " + os);
 			}
 		}
 		if(cmd.hasOption("m")) {
@@ -309,13 +309,13 @@ public class InterfaceConnections {
 			String memory = eingabe[1];
 			if (switch_funktion.equals("leaf") || switch_funktion.equals("mgmt") || switch_funktion.equals("spine") || switch_funktion.equals("oob-server") || switch_funktion.equals("oob-switch")) {
 				Config.getInstance().getTag(switch_funktion).setMemory(memory);
-				System.out.println("\nMemory für " +  switch_funktion + ": " + memory);
+				System.out.println("\nMemory for " +  switch_funktion + ": " + memory);
 			}
 			if (switch_funktion.equals("all")) {
 				Config.getInstance().getleaf().setMemory(memory);
 				Config.getInstance().getmgmt().setMemory(memory);
 				Config.getInstance().getspine().setMemory(memory);
-				System.out.println("\nMemory für leaf, spine und mgmt Switche: " + memory);
+				System.out.println("\nMemory for leaf, spine and mgmt switches: " + memory);
 			}
 		}
 		if(cmd.hasOption("c")) {
@@ -324,26 +324,26 @@ public class InterfaceConnections {
 			String config = eingabe[1];
 			if (switch_funktion.equals("leaf") || switch_funktion.equals("mgmt") || switch_funktion.equals("spine") || switch_funktion.equals("oob-server") || switch_funktion.equals("oob-switch")) {
 				Config.getInstance().getTag(switch_funktion).setConfig(config);
-				System.out.println("\nConfig-Link für " +  switch_funktion + ": " + config);
+				System.out.println("\nConfig-Link for " +  switch_funktion + ": " + config);
 			}
 			if (switch_funktion.equals("all")) {
 				Config.getInstance().getleaf().setConfig(config);
 				Config.getInstance().getmgmt().setConfig(config);
 				Config.getInstance().getspine().setConfig(config);
-				System.out.println("\nConfig-Link für leaf, spine und mgmt Switche: " + config);
+				System.out.println("\nConfig-Link for leaf, spine and mgmt switches: " + config);
 			}
 		}
 		if(cmd.hasOption("help")) {
 			update = false;
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp( "java -jar InterfaceConnections.jar [options] ", options );
+			formatter.printHelp( "java -jar netbox2vagrant.jar [options] ", options );
 			}
 	
 		} catch (org.apache.commons.cli.ParseException e) {
 			update = false;
 			System.out.println("\nFehler\n");
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp( "java -jar InterfaceConnections.jar [options] ", options );
+			formatter.printHelp( "java -jar netbox2vagrant.jar [options] ", options );
 		}
 		
 		if(update) {
