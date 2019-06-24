@@ -212,22 +212,22 @@ public class InterfaceConnections {
 		
 		Options options = new Options();
 
-		options.addOption("n", "servername", true, "change servername");
+		options.addOption("s", "servername", true, "change servername");
 		options.addOption("t", "token", true, "change API Token");
 		options.addOption("v", "version", true, "update version");
-		options.addOption("s", "settings", false, "show configuration");
+		options.addOption("c", "configuration", false, "show configuration");
 		options.addOption("h", "help", false, "show help");
-		options.addOption("sk", "skipoob", false, "set oobserver, obswitch function=fake");
+		options.addOption("skip", "skipoob", false, "set oobserver, obswitch function=fake");
 		
-		Option PlaybookLink = new Option("p", "playbook", true, "update playbook <tag|all> <playbook>");
+		Option PlaybookLink = new Option("pb", "playbook", true, "update playbook <tag|all> <playbook>");
 		PlaybookLink.setArgs(2);
 		options.addOption(PlaybookLink);
 		
-		Option OsLink = new Option("o", "os", true, "update os-link <tag|all> <os link>");
+		Option OsLink = new Option("os", "oslink", true, "update os-link <tag|all> <os link>");
 		OsLink.setArgs(2);
 		options.addOption(OsLink);
 		
-		Option Configlink = new Option("c", "configlink", true, "update config-link <tag|all> <config link>");
+		Option Configlink = new Option("cl", "configlink", true, "update config-link <tag|all> <config link>");
 		Configlink.setArgs(2);
 		options.addOption(Configlink);
 		
@@ -240,8 +240,8 @@ public class InterfaceConnections {
 		try {
 		CommandLine cmd = parser.parse( options, args);
 		
-		if(cmd.hasOption("n")) {
-			Config.getInstance().setURL(cmd.getOptionValue("n"));
+		if(cmd.hasOption("s")) {
+			Config.getInstance().setURL(cmd.getOptionValue("s"));
 			System.out.println("\nNew Servername: " + Config.getInstance().getURL());
 			servername = Config.getInstance().getURL();
 			}
@@ -264,17 +264,17 @@ public class InterfaceConnections {
 		else {
 			version = Config.getInstance().getVersion();
 		}
-		if(cmd.hasOption("s")) {
+		if(cmd.hasOption("c")) {
 			update = false;
             System.out.println("\nConfiguration\nServer:\t\t" + Config.getInstance().getURL() + "\n"
     		+ "Token:\t\t" + Config.getInstance().getToken() + "\n"
     		+ "Version:\t" + Config.getInstance().getVersion()); 
 			}
-		if(cmd.hasOption("sk")) {
+		if(cmd.hasOption("skip")) {
 			skipoob = true;
 		}
-		if(cmd.hasOption("p")) {
-			String[] eingabe = cmd.getOptionValues("p");
+		if(cmd.hasOption("pb")) {
+			String[] eingabe = cmd.getOptionValues("pb");
 			String switch_funktion = eingabe[0];
 			String playbook = eingabe[1];
 			if (switch_funktion.equals("leaf") || switch_funktion.equals("mgmt") || switch_funktion.equals("spine") || switch_funktion.equals("oob-server") || switch_funktion.equals("oob-switch")) {
@@ -288,8 +288,8 @@ public class InterfaceConnections {
 				System.out.println("\nPlaybook for leaf, spine and mgmt switches: " + playbook);
 			}
 		}
-		if(cmd.hasOption("o")) {
-			String[] eingabe = cmd.getOptionValues("o");
+		if(cmd.hasOption("os")) {
+			String[] eingabe = cmd.getOptionValues("os");
 			String switch_funktion = eingabe[0];
 			String os = eingabe[1];
 			if (switch_funktion.equals("leaf") || switch_funktion.equals("mgmt") || switch_funktion.equals("spine") || switch_funktion.equals("oob-server") || switch_funktion.equals("oob-switch")) {
@@ -318,8 +318,8 @@ public class InterfaceConnections {
 				System.out.println("\nMemory for leaf, spine and mgmt switches: " + memory);
 			}
 		}
-		if(cmd.hasOption("c")) {
-			String[] eingabe = cmd.getOptionValues("c");
+		if(cmd.hasOption("cl")) {
+			String[] eingabe = cmd.getOptionValues("cl");
 			String switch_funktion = eingabe[0];
 			String config = eingabe[1];
 			if (switch_funktion.equals("leaf") || switch_funktion.equals("mgmt") || switch_funktion.equals("spine") || switch_funktion.equals("oob-server") || switch_funktion.equals("oob-switch")) {
@@ -341,7 +341,7 @@ public class InterfaceConnections {
 	
 		} catch (org.apache.commons.cli.ParseException e) {
 			update = false;
-			System.out.println("\nFehler\n");
+			System.out.println(e);
 			HelpFormatter formatter = new HelpFormatter();
 			formatter.printHelp( "java -jar netbox2vagrant.jar [options] ", options );
 		}
