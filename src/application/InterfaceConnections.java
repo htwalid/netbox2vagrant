@@ -214,131 +214,135 @@ public class InterfaceConnections {
 
 		options.addOption("s", "servername", true, "change servername");
 		options.addOption("t", "token", true, "change API Token");
-		options.addOption("v", "version", true, "update version");
+		options.addOption("v", "version", true, "change version");
 		options.addOption("c", "configuration", false, "show configuration");
 		options.addOption("h", "help", false, "show help");
-		options.addOption("skip", "skipoob", false, "set oobserver, obswitch function=fake");
+		options.addOption("skip", "skipoob", false, "set function of oobserver, obswitch to fake");
 		
-		Option PlaybookLink = new Option("pb", "playbook", true, "update playbook <tag|all> <playbook>");
+		Option PlaybookLink = new Option("pb", "playbook", true, "set playbook link");
 		PlaybookLink.setArgs(2);
+		PlaybookLink.setArgName("tag|all> <playbook link");
 		options.addOption(PlaybookLink);
 		
-		Option OsLink = new Option("os", "oslink", true, "update os-link <tag|all> <os link>");
+		Option OsLink = new Option("os", "oslink", true, "set os-link");
 		OsLink.setArgs(2);
+		OsLink.setArgName("tag|all> <os link");
 		options.addOption(OsLink);
 		
-		Option Configlink = new Option("cl", "configlink", true, "update config-link <tag|all> <config link>");
+		Option Configlink = new Option("cl", "configlink", true, "set config-link");
 		Configlink.setArgs(2);
+		Configlink.setArgName("tag|all> <config link");
 		options.addOption(Configlink);
 		
-		Option Memory = new Option("m", "memory", true, "update memory <tag|all> <memory>");
+		Option Memory = new Option("m", "memory", true, "set memory in MB");
 		Memory.setArgs(2);
+		Memory.setArgName("tag|all> <memory");
 		options.addOption(Memory);
 		
 		CommandLineParser parser = new DefaultParser();
 		
 		try {
-		CommandLine cmd = parser.parse( options, args);
+			CommandLine cmd = parser.parse( options, args);
+			
+			if(cmd.hasOption("s")) {
+				Config.getInstance().setURL(cmd.getOptionValue("s"));
+				System.out.println("\nNew Servername: " + Config.getInstance().getURL());
+				servername = Config.getInstance().getURL();
+				}
+			else {
+				servername = Config.getInstance().getURL();
+			}
+			if(cmd.hasOption("t")) {
+	        	Config.getInstance().setToken(cmd.getOptionValue("t"));
+	        	System.out.println("\nNew Token: " + Config.getInstance().getToken());
+	        	token = Config.getInstance().getToken();
+			}
+			else {
+				token = Config.getInstance().getToken();
+			}
+			if(cmd.hasOption("v")) {
+	        	Config.getInstance().setVersion(cmd.getOptionValue("v"));
+	        	System.out.println("\nNew Version: " + Config.getInstance().getVersion());
+	        	version = cmd.getOptionValue("v");
+				}
+			else {
+				version = Config.getInstance().getVersion();
+			}
+			if(cmd.hasOption("c")) {
+				update = false;
+	            System.out.println("\nConfiguration\nServer:\t\t" + Config.getInstance().getURL() + "\n"
+	    		+ "Token:\t\t" + Config.getInstance().getToken() + "\n"
+	    		+ "Version:\t" + Config.getInstance().getVersion()); 
+				}
+			if(cmd.hasOption("skip")) {
+				skipoob = true;
+			}
+			if(cmd.hasOption("pb")) {
+				String[] eingabe = cmd.getOptionValues("pb");
+				String switch_funktion = eingabe[0];
+				String playbook = eingabe[1];
+				if (switch_funktion.equals("leaf") || switch_funktion.equals("mgmt") || switch_funktion.equals("spine") || switch_funktion.equals("oob-server") || switch_funktion.equals("oob-switch")) {
+					Config.getInstance().getTag(switch_funktion).setPlaybook(playbook);
+					System.out.println("\nPlaybook for " +  switch_funktion + ": " + playbook);
+				}
+				if (switch_funktion.equals("all")) {
+					Config.getInstance().getleaf().setPlaybook(playbook);
+					Config.getInstance().getmgmt().setPlaybook(playbook);
+					Config.getInstance().getspine().setPlaybook(playbook);
+					System.out.println("\nPlaybook for leaf, spine and mgmt switches: " + playbook);
+				}
+			}
+			if(cmd.hasOption("os")) {
+				String[] eingabe = cmd.getOptionValues("os");
+				String switch_funktion = eingabe[0];
+				String os = eingabe[1];
+				if (switch_funktion.equals("leaf") || switch_funktion.equals("mgmt") || switch_funktion.equals("spine") || switch_funktion.equals("oob-server") || switch_funktion.equals("oob-switch")) {
+					Config.getInstance().getTag(switch_funktion).setOs(os);;
+					System.out.println("\nos-Link for " +  switch_funktion + ": " + os);
+				}
+				if (switch_funktion.equals("all")) {
+					Config.getInstance().getleaf().setOs(os);
+					Config.getInstance().getmgmt().setOs(os);
+					Config.getInstance().getspine().setOs(os);
+					System.out.println("\nos-Link for leaf, spine and mgmt switches: " + os);
+				}
+			}
+			if(cmd.hasOption("m")) {
+				String[] eingabe = cmd.getOptionValues("m");
+				String switch_funktion = eingabe[0];
+				String memory = eingabe[1];
+				if (switch_funktion.equals("leaf") || switch_funktion.equals("mgmt") || switch_funktion.equals("spine") || switch_funktion.equals("oob-server") || switch_funktion.equals("oob-switch")) {
+					Config.getInstance().getTag(switch_funktion).setMemory(memory);
+					System.out.println("\nMemory for " +  switch_funktion + ": " + memory);
+				}
+				if (switch_funktion.equals("all")) {
+					Config.getInstance().getleaf().setMemory(memory);
+					Config.getInstance().getmgmt().setMemory(memory);
+					Config.getInstance().getspine().setMemory(memory);
+					System.out.println("\nMemory for leaf, spine and mgmt switches: " + memory);
+				}
+			}
+			if(cmd.hasOption("cl")) {
+				String[] eingabe = cmd.getOptionValues("cl");
+				String switch_funktion = eingabe[0];
+				String config = eingabe[1];
+				if (switch_funktion.equals("leaf") || switch_funktion.equals("mgmt") || switch_funktion.equals("spine") || switch_funktion.equals("oob-server") || switch_funktion.equals("oob-switch")) {
+					Config.getInstance().getTag(switch_funktion).setConfig(config);
+					System.out.println("\nConfig-Link for " +  switch_funktion + ": " + config);
+				}
+				if (switch_funktion.equals("all")) {
+					Config.getInstance().getleaf().setConfig(config);
+					Config.getInstance().getmgmt().setConfig(config);
+					Config.getInstance().getspine().setConfig(config);
+					System.out.println("\nConfig-Link for leaf, spine and mgmt switches: " + config);
+				}
+			}
+			if(cmd.hasOption("help")) {
+				update = false;
+				HelpFormatter formatter = new HelpFormatter();
+				formatter.printHelp( "java -jar netbox2vagrant.jar [options] ", options );
+				}
 		
-		if(cmd.hasOption("s")) {
-			Config.getInstance().setURL(cmd.getOptionValue("s"));
-			System.out.println("\nNew Servername: " + Config.getInstance().getURL());
-			servername = Config.getInstance().getURL();
-			}
-		else {
-			servername = Config.getInstance().getURL();
-		}
-		if(cmd.hasOption("t")) {
-        	Config.getInstance().setToken(cmd.getOptionValue("t"));
-        	System.out.println("\nNew Token: " + Config.getInstance().getToken());
-        	token = Config.getInstance().getToken();
-		}
-		else {
-			token = Config.getInstance().getToken();
-		}
-		if(cmd.hasOption("v")) {
-        	Config.getInstance().setVersion(cmd.getOptionValue("v"));
-        	System.out.println("\nNew Version: " + Config.getInstance().getVersion());
-        	version = cmd.getOptionValue("v");
-			}
-		else {
-			version = Config.getInstance().getVersion();
-		}
-		if(cmd.hasOption("c")) {
-			update = false;
-            System.out.println("\nConfiguration\nServer:\t\t" + Config.getInstance().getURL() + "\n"
-    		+ "Token:\t\t" + Config.getInstance().getToken() + "\n"
-    		+ "Version:\t" + Config.getInstance().getVersion()); 
-			}
-		if(cmd.hasOption("skip")) {
-			skipoob = true;
-		}
-		if(cmd.hasOption("pb")) {
-			String[] eingabe = cmd.getOptionValues("pb");
-			String switch_funktion = eingabe[0];
-			String playbook = eingabe[1];
-			if (switch_funktion.equals("leaf") || switch_funktion.equals("mgmt") || switch_funktion.equals("spine") || switch_funktion.equals("oob-server") || switch_funktion.equals("oob-switch")) {
-				Config.getInstance().getTag(switch_funktion).setPlaybook(playbook);
-				System.out.println("\nPlaybook for " +  switch_funktion + ": " + playbook);
-			}
-			if (switch_funktion.equals("all")) {
-				Config.getInstance().getleaf().setPlaybook(playbook);
-				Config.getInstance().getmgmt().setPlaybook(playbook);
-				Config.getInstance().getspine().setPlaybook(playbook);
-				System.out.println("\nPlaybook for leaf, spine and mgmt switches: " + playbook);
-			}
-		}
-		if(cmd.hasOption("os")) {
-			String[] eingabe = cmd.getOptionValues("os");
-			String switch_funktion = eingabe[0];
-			String os = eingabe[1];
-			if (switch_funktion.equals("leaf") || switch_funktion.equals("mgmt") || switch_funktion.equals("spine") || switch_funktion.equals("oob-server") || switch_funktion.equals("oob-switch")) {
-				Config.getInstance().getTag(switch_funktion).setOs(os);;
-				System.out.println("\nos-Link for " +  switch_funktion + ": " + os);
-			}
-			if (switch_funktion.equals("all")) {
-				Config.getInstance().getleaf().setOs(os);
-				Config.getInstance().getmgmt().setOs(os);
-				Config.getInstance().getspine().setOs(os);
-				System.out.println("\nos-Link for leaf, spine and mgmt switches: " + os);
-			}
-		}
-		if(cmd.hasOption("m")) {
-			String[] eingabe = cmd.getOptionValues("m");
-			String switch_funktion = eingabe[0];
-			String memory = eingabe[1];
-			if (switch_funktion.equals("leaf") || switch_funktion.equals("mgmt") || switch_funktion.equals("spine") || switch_funktion.equals("oob-server") || switch_funktion.equals("oob-switch")) {
-				Config.getInstance().getTag(switch_funktion).setMemory(memory);
-				System.out.println("\nMemory for " +  switch_funktion + ": " + memory);
-			}
-			if (switch_funktion.equals("all")) {
-				Config.getInstance().getleaf().setMemory(memory);
-				Config.getInstance().getmgmt().setMemory(memory);
-				Config.getInstance().getspine().setMemory(memory);
-				System.out.println("\nMemory for leaf, spine and mgmt switches: " + memory);
-			}
-		}
-		if(cmd.hasOption("cl")) {
-			String[] eingabe = cmd.getOptionValues("cl");
-			String switch_funktion = eingabe[0];
-			String config = eingabe[1];
-			if (switch_funktion.equals("leaf") || switch_funktion.equals("mgmt") || switch_funktion.equals("spine") || switch_funktion.equals("oob-server") || switch_funktion.equals("oob-switch")) {
-				Config.getInstance().getTag(switch_funktion).setConfig(config);
-				System.out.println("\nConfig-Link for " +  switch_funktion + ": " + config);
-			}
-			if (switch_funktion.equals("all")) {
-				Config.getInstance().getleaf().setConfig(config);
-				Config.getInstance().getmgmt().setConfig(config);
-				Config.getInstance().getspine().setConfig(config);
-				System.out.println("\nConfig-Link for leaf, spine and mgmt switches: " + config);
-			}
-		}
-		if(cmd.hasOption("help")) {
-			update = false;
-			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp( "java -jar netbox2vagrant.jar [options] ", options );
-			}
-	
 		} catch (org.apache.commons.cli.ParseException e) {
 			update = false;
 			System.out.println(e);
